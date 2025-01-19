@@ -14,71 +14,96 @@
 
         body {
             font-family: 'Poppins', Arial, sans-serif;
+            font-weight: 600;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            background: linear-gradient(135deg, #0088cc, #005f99);
-            color: #ffffff;
-            transition: background-color 0.3s, color 0.3s;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            color: #333;
         }
 
         h1 {
             margin-bottom: 20px;
-            font-size: 2.5rem;
+            font-size: 1.6rem;
             text-align: center;
-            color: #ffffff;
-            animation: fadeInDown 0.6s ease;
+            color: white;
+            transition: all 0.3s ease-in-out;
         }
 
         form {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-            max-width: 450px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             width: 100%;
-            animation: fadeInUp 0.6s ease;
+            max-width: 400px;
         }
 
         label {
             font-size: 1rem;
-            color: #333;
-            animation: fadeIn 0.6s ease;
+            color: #555;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .radio-group div {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .radio-group input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            appearance: none;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            cursor: pointer;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .radio-group input[type="radio"]:checked {
+            background-color: #ff6f61;
+            border-color: #ff6f61;
         }
 
         select, input {
             padding: 10px;
             font-size: 1rem;
             border: 1px solid #ddd;
-            border-radius: 10px;
+            border-radius: 8px;
             outline: none;
             transition: border-color 0.3s;
-            animation: fadeIn 0.7s ease;
         }
 
         select:focus, input:focus {
-            border-color: #0088cc;
+            border-color: #ff6f61;
         }
 
         button {
             padding: 12px;
             font-size: 1rem;
-            background: linear-gradient(135deg, #0088cc, #005f99);
+            background: linear-gradient(135deg, #ff6f61, #de6262);
             color: white;
             border: none;
-            border-radius: 15px;
+            border-radius: 12px;
             cursor: pointer;
             transition: background 0.3s, transform 0.2s;
-            animation: fadeInUp 0.8s ease;
         }
 
         button:hover {
-            background: linear-gradient(135deg, #005f99, #003f66);
+            background: linear-gradient(135deg, #de6262, #bf4c4c);
         }
 
         button:active {
@@ -86,116 +111,84 @@
         }
 
         .close-btn {
-            margin-top: 10px;
+            margin-top: 15px;
+            padding: 10px;
+            font-size: 1rem;
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .close-btn:hover {
+            background-color: #de6262;
         }
 
         .hidden {
             display: none;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         .result {
-            margin-top: 20px;
-            font-size: 1.2rem;
-            color: #ffffff;
+            margin-top: 15px;
+            font-size: 1rem;
+            color: #333;
             text-align: center;
-            animation: fadeIn 0.6s ease;
+        }
+
+        .social-logo {
+            width: 20px;
         }
     </style>
 </head>
 <body>
-    <h1>Калькулятор стоимости</h1>
+    <h1 id="formTitle">Калькулятор стоимости</h1>
     <form id="mainForm">
         <label for="projectType">Тип проекта:</label>
         <select id="projectType">
-            <option value="site">Сайт</option>
-            <option value="chatbot">Чат-бот</option>
-            <option value="webapp">Веб-приложение</option>
+            <option value="site">🌐 Сайт</option>
+            <option value="chatbot">🤖 Чат-бот</option>
+            <option value="webapp">📱 Веб-приложение</option>
         </select>
 
         <div id="complexitySection">
-            <label for="complexity">Сложность:</label>
-            <input type="number" id="complexity" placeholder="Введите уровень сложности (1-10)">
+            <label for="siteType">Тип сайта:</label>
+            <div class="radio-group">
+                <div>
+                    <input type="radio" id="singlePage" name="siteType" value="singlePage">
+                    <label for="singlePage">Одностраничный сайт</label>
+                </div>
+                <div>
+                    <input type="radio" id="multiPage" name="siteType" value="multiPage">
+                    <label for="multiPage">Многостраничный сайт</label>
+                </div>
+                <div>
+                    <input type="radio" id="onlineStore" name="siteType" value="onlineStore">
+                    <label for="onlineStore">Интернет-магазин</label>
+                </div>
+            </div>
         </div>
 
         <div id="chatbotSection" class="hidden">
-            <label>Тип чат-бота:</label>
+            <label>Социальные сети:</label>
             <div>
-                <input type="checkbox" id="infoBot" value="info">
-                <label for="infoBot">Информационный</label>
+                <input type="checkbox" id="telegram" value="telegram">
+                <img class="social-logo" src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram"> Telegram
             </div>
             <div>
-                <input type="checkbox" id="tradeBot" value="trade">
-                <label for="tradeBot">Торговый</label>
-            </div>
-            <div>
-                <input type="checkbox" id="serviceBot" value="service">
-                <label for="serviceBot">Сервисный</label>
-            </div>
-
-            <label for="socialNetworks">Сколько соц. сетей?</label>
-            <select id="socialNetworks">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
-
-            <label for="advancedFeatures">Расширенные функции:</label>
-            <div>
-                <input type="checkbox" id="crmIntegration" value="crm">
-                <label for="crmIntegration">Интеграция с CRM</label>
-            </div>
-            <div>
-                <input type="checkbox" id="paymentProcessing" value="payment">
-                <label for="paymentProcessing">Обработка платежей</label>
-            </div>
-            <div>
-                <input type="checkbox" id="aiProcessing" value="ai">
-                <label for="aiProcessing">Использование AI для обработки запросов</label>
+                <input type="checkbox" id="whatsapp" value="whatsapp">
+                <img class="social-logo" src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp"> WhatsApp
             </div>
         </div>
 
         <label for="currency">Валюта:</label>
         <select id="currency">
-            <option value="rub">Российский рубль</option>
-            <option value="usd">Доллар</option>
-            <option value="eur">Евро</option>
-            <option value="byn">Белорусский рубль</option>
+            <option value="rub">🇷🇺 Рубль</option>
+            <option value="usd">🇺🇸 Доллар</option>
         </select>
 
-        <button type="button" id="calculateBtn">Рассчитать стоимость</button>
+        <button type="button" id="calculateBtn">🔢 Рассчитать стоимость</button>
     </form>
 
     <div class="result" id="result"></div>
@@ -206,60 +199,42 @@
         const tg = window.Telegram.WebApp;
         tg.ready();
 
-        document.body.style.backgroundColor = tg.themeParams.bg_color || "#f4f4f9";
-        document.body.style.color = tg.themeParams.text_color || "#ffffff";
-
+        const formTitle = document.getElementById("formTitle");
         const projectType = document.getElementById("projectType");
         const complexitySection = document.getElementById("complexitySection");
         const chatbotSection = document.getElementById("chatbotSection");
-        const calculateBtn = document.getElementById("calculateBtn");
-        const resultDiv = document.getElementById("result");
+        const result = document.getElementById("result");
 
         projectType.addEventListener("change", () => {
-            if (projectType.value === "chatbot") {
+            const projectValue = projectType.value;
+
+            // Изменяем заголовок
+            if (projectValue === "site") {
+                formTitle.textContent = "Калькулятор стоимости сайта";
+                complexitySection.classList.remove("hidden");
+                chatbotSection.classList.add("hidden");
+            } else if (projectValue === "chatbot") {
+                formTitle.textContent = "Калькулятор стоимости чат-бота";
                 complexitySection.classList.add("hidden");
                 chatbotSection.classList.remove("hidden");
             } else {
+                formTitle.textContent = "Калькулятор стоимости веб-приложения";
+                complexitySection.classList.add("hidden");
                 chatbotSection.classList.add("hidden");
-                complexitySection.classList.remove("hidden");
             }
         });
 
-        calculateBtn.addEventListener("click", () => {
-            let cost = 0;
+        document.getElementById("calculateBtn").addEventListener("click", () => {
+            const projectValue = projectType.value;
             const currency = document.getElementById("currency").value;
-            let rate = 1;
-            let currencySymbol = "руб.";
+            let cost = 0;
 
-            switch (currency) {
-                case "usd":
-                    rate = 0.013;
-                    currencySymbol = "$";
-                    break;
-                case "eur":
-                    rate = 0.012;
-                    currencySymbol = "€";
-                    break;
-                case "byn":
-                    rate = 0.033;
-                    currencySymbol = "BYN";
-                    break;
-            }
+            if (projectValue === "site") cost = 500;
+            if (projectValue === "chatbot") cost = 350;
+            if (projectValue === "webapp") cost = 1200;
 
-            if (projectType.value === "chatbot") {
-                const socialNetworks = parseInt(document.getElementById("socialNetworks").value) || 1;
-                const functions = [
-                    document.getElementById("crmIntegration").checked,
-                    document.getElementById("paymentProcessing").checked,
-                    document.getElementById("aiProcessing").checked
-                ].filter(Boolean).length;
-                cost = (socialNetworks * 500 + functions * 1000) * rate;
-            } else {
-                const complexity = parseInt(document.getElementById("complexity").value) || 1;
-                cost = complexity * 1000 * rate;
-            }
-
-            resultDiv.textContent = `Стоимость проекта: ${Math.round(cost)} ${currencySymbol}`;
+            const currencySymbol = currency === "usd" ? "$" : "₽";
+            result.textContent = `Стоимость: ${cost} ${currencySymbol}`;
         });
     </script>
 </body>
