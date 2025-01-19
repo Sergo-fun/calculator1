@@ -175,19 +175,21 @@
         </div>
 
         <div id="chatbotSection" class="hidden">
-            <label>Тип чат-бота:</label>
-            <div>
-                <input type="checkbox" id="infoBot" value="info">
-                <label for="infoBot">📄 Информационный</label>
-            </div>
-            <div>
-                <input type="checkbox" id="tradeBot" value="trade">
-                <label for="tradeBot">🛒 Торговый</label>
-            </div>
-            <div>
-                <input type="checkbox" id="serviceBot" value="service">
-                <label for="serviceBot">🔧 Сервисный</label>
-            </div>
+    <label>Тип чат-бота:</label>
+    <div>
+        <input type="radio" id="infoBot" name="chatbotType" value="info">
+        <label for="infoBot">📄 Информационный</label>
+    </div>
+    <div>
+        <input type="radio" id="tradeBot" name="chatbotType" value="trade">
+        <label for="tradeBot">🛒 Торговый</label>
+    </div>
+    <div>
+        <input type="radio" id="serviceBot" name="chatbotType" value="service">
+        <label for="serviceBot">🔧 Сервисный</label>
+    </div>
+
+
 
             <label>Социальные сети:</label>
             <div>
@@ -229,10 +231,11 @@
 
         <label for="currency">Валюта:</label>
         <select id="currency">
+            <option value="byn">🇧🇾 Белорусский рубль</option>
             <option value="rub">🇷🇺 Российский рубль</option>
             <option value="usd">🇺🇸 Доллар</option>
             <option value="eur">🇪🇺 Евро</option>
-            <option value="byn">🇧🇾 Белорусский рубль</option>
+
         </select>
 
         <button type="button" id="calculateBtn">🔢 Рассчитать стоимость</button>
@@ -316,17 +319,36 @@
         if (numberOfBots > 3) totalCost += botCost * 0.25;  // 4-й бот: 75% скидка
         if (numberOfBots > 4) totalCost += 0;               // 5-й бот: бесплатно
 
+        const crmSelected = document.querySelector("#crmIntegration").checked;
+const paymentSelected = document.querySelector("#paymentProcessing").checked;
+const aiSelected = document.querySelector("#aiProcessing").checked;
+
+// Добавляем 10% за каждую выбранную расширенную функцию
+if (crmSelected) totalCost *= 1.10;  // 10% за CRM
+if (paymentSelected) totalCost *= 1.10;  // 10% за Payment
+if (aiSelected) totalCost *= 1.10;  // 10% за AI
         // Присваиваем итоговую стоимость
         cost = totalCost;
     }
 
-    // Если выбран другой тип проекта
-    if (projectType.value === "site") {
-        cost = 529; // Стоимость сайта в BYN
-    } else if (projectType.value === "webapp") {
-        cost = 1199; // Стоимость веб-приложения в BYN
+   // Если выбран другой тип проекта
+if (projectType.value === "site") {
+    const siteType = document.querySelector('input[name="siteType"]:checked');
+    if (!siteType) {
+        alert("Пожалуйста, выберите тип сайта.");
+        return;
     }
 
+    if (siteType.value === "singlePage" || siteType.value === "portfolioBlog") {
+        cost = 349; // Стоимость одностраничного сайта или портфолио/блога в BYN
+    } else if (siteType.value === "multiPage") {
+        cost = 529; // Стоимость многостраничного сайта в BYN
+    } else if (siteType.value === "onlineStore") {
+        cost = 1049; // Стоимость интернет-магазина в BYN
+    }
+} else if (projectType.value === "webapp") {
+    cost = 1199; // Стоимость веб-приложения в BYN
+}
     // Преобразуем стоимость в нужную валюту
     cost *= rate;
 
