@@ -41,7 +41,7 @@
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 400px;
+            max-width: 350px; /* Уменьшена ширина формы */
         }
 
         label {
@@ -119,7 +119,7 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            width: 100%;
+            width: 80%; /* Уменьшена ширина кнопки закрытия */
         }
 
         .close-btn:hover {
