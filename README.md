@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Калькулятор стоимости</title>
+    <title>Калькулятооор стоимости</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * {
@@ -26,10 +26,9 @@
 
         h1 {
             margin-bottom: 20px;
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             text-align: center;
             color: white;
-            transition: all 0.3s ease-in-out;
         }
 
         form {
@@ -40,7 +39,7 @@
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
+            width: 90%;
             max-width: 400px;
         }
 
@@ -143,7 +142,7 @@
     </style>
 </head>
 <body>
-    <h1 id="formTitle">Калькулятор стоимости</h1>
+    <h1>Калькулятор стоимости</h1>
     <form id="mainForm">
         <label for="projectType">Тип проекта:</label>
         <select id="projectType">
@@ -199,42 +198,28 @@
         const tg = window.Telegram.WebApp;
         tg.ready();
 
-        const formTitle = document.getElementById("formTitle");
-        const projectType = document.getElementById("projectType");
-        const complexitySection = document.getElementById("complexitySection");
-        const chatbotSection = document.getElementById("chatbotSection");
-        const result = document.getElementById("result");
+        document.getElementById("projectType").addEventListener("change", () => {
+            const complexitySection = document.getElementById("complexitySection");
+            const chatbotSection = document.getElementById("chatbotSection");
+            const projectType = document.getElementById("projectType").value;
 
-        projectType.addEventListener("change", () => {
-            const projectValue = projectType.value;
+            complexitySection.classList.add("hidden");
+            chatbotSection.classList.add("hidden");
 
-            // Изменяем заголовок
-            if (projectValue === "site") {
-                formTitle.textContent = "Калькулятор стоимости сайта";
-                complexitySection.classList.remove("hidden");
-                chatbotSection.classList.add("hidden");
-            } else if (projectValue === "chatbot") {
-                formTitle.textContent = "Калькулятор стоимости чат-бота";
-                complexitySection.classList.add("hidden");
-                chatbotSection.classList.remove("hidden");
-            } else {
-                formTitle.textContent = "Калькулятор стоимости веб-приложения";
-                complexitySection.classList.add("hidden");
-                chatbotSection.classList.add("hidden");
-            }
+            if (projectType === "site") complexitySection.classList.remove("hidden");
+            if (projectType === "chatbot") chatbotSection.classList.remove("hidden");
         });
 
         document.getElementById("calculateBtn").addEventListener("click", () => {
-            const projectValue = projectType.value;
+            const projectType = document.getElementById("projectType").value;
             const currency = document.getElementById("currency").value;
             let cost = 0;
 
-            if (projectValue === "site") cost = 500;
-            if (projectValue === "chatbot") cost = 350;
-            if (projectValue === "webapp") cost = 1200;
+            if (projectType === "site") cost = 500;
+            if (projectType === "chatbot") cost = 350;
 
-            const currencySymbol = currency === "usd" ? "$" : "₽";
-            result.textContent = `Стоимость: ${cost} ${currencySymbol}`;
+            const result = `Стоимость: ${cost} ${currency === "usd" ? "$" : "₽"}`;
+            document.getElementById("result").textContent = result;
         });
     </script>
 </body>
