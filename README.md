@@ -26,22 +26,23 @@
 
         h1 {
             margin-bottom: 20px;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             text-align: center;
             color: white;
+            transition: all 0.3s ease-in-out;
         }
 
-      form {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        background: #fff;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        width: 90%;
-        max-width: 360px; /* Уменьшена ширина формы */
-    }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
 
         label {
             font-size: 1rem;
@@ -110,21 +111,16 @@
         }
 
         .close-btn {
-        margin-top: 15px;
-        padding: 10px;
-        font-size: 1rem;
-        background-color: #ff6f61;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        width: 120px; /* Уменьшена ширина кнопки */
-        align-self: center; /* Выравнивание по центру */
-    }
-
-    .close-btn:hover {
-        background-color: #de6262;
-    }
+            margin-top: 15px;
+            padding: 10px;
+            font-size: 1rem;
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+        }
 
         .close-btn:hover {
             background-color: #de6262;
@@ -147,7 +143,7 @@
     </style>
 </head>
 <body>
-    <h1>Калькулятор стоимости</h1>
+    <h1 id="formTitle">Калькулятор стоимости</h1>
     <form id="mainForm">
         <label for="projectType">Тип проекта:</label>
         <select id="projectType">
@@ -203,28 +199,42 @@
         const tg = window.Telegram.WebApp;
         tg.ready();
 
-        document.getElementById("projectType").addEventListener("change", () => {
-            const complexitySection = document.getElementById("complexitySection");
-            const chatbotSection = document.getElementById("chatbotSection");
-            const projectType = document.getElementById("projectType").value;
+        const formTitle = document.getElementById("formTitle");
+        const projectType = document.getElementById("projectType");
+        const complexitySection = document.getElementById("complexitySection");
+        const chatbotSection = document.getElementById("chatbotSection");
+        const result = document.getElementById("result");
 
-            complexitySection.classList.add("hidden");
-            chatbotSection.classList.add("hidden");
+        projectType.addEventListener("change", () => {
+            const projectValue = projectType.value;
 
-            if (projectType === "site") complexitySection.classList.remove("hidden");
-            if (projectType === "chatbot") chatbotSection.classList.remove("hidden");
+            // Изменяем заголовок
+            if (projectValue === "site") {
+                formTitle.textContent = "Калькулятор стоимости сайта";
+                complexitySection.classList.remove("hidden");
+                chatbotSection.classList.add("hidden");
+            } else if (projectValue === "chatbot") {
+                formTitle.textContent = "Калькулятор стоимости чат-бота";
+                complexitySection.classList.add("hidden");
+                chatbotSection.classList.remove("hidden");
+            } else {
+                formTitle.textContent = "Калькулятор стоимости веб-приложения";
+                complexitySection.classList.add("hidden");
+                chatbotSection.classList.add("hidden");
+            }
         });
 
         document.getElementById("calculateBtn").addEventListener("click", () => {
-            const projectType = document.getElementById("projectType").value;
+            const projectValue = projectType.value;
             const currency = document.getElementById("currency").value;
             let cost = 0;
 
-            if (projectType === "site") cost = 500;
-            if (projectType === "chatbot") cost = 350;
+            if (projectValue === "site") cost = 500;
+            if (projectValue === "chatbot") cost = 350;
+            if (projectValue === "webapp") cost = 1200;
 
-            const result = `Стоимость: ${cost} ${currency === "usd" ? "$" : "₽"}`;
-            document.getElementById("result").textContent = result;
+            const currencySymbol = currency === "usd" ? "$" : "₽";
+            result.textContent = `Стоимость: ${cost} ${currencySymbol}`;
         });
     </script>
 </body>
