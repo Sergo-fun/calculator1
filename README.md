@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Калькулятооор стоимости</title>
+    <title>Калькулятор стоимости</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * {
@@ -31,17 +31,17 @@
             color: white;
         }
 
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            background: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 400px;
-        }
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        background: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        width: 90%;
+        max-width: 360px; /* Уменьшена ширина формы */
+    }
 
         label {
             font-size: 1rem;
@@ -110,16 +110,21 @@
         }
 
         .close-btn {
-            margin-top: 15px;
-            padding: 10px;
-            font-size: 1rem;
-            background-color: #ff6f61;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-        }
+        margin-top: 15px;
+        padding: 10px;
+        font-size: 1rem;
+        background-color: #ff6f61;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 120px; /* Уменьшена ширина кнопки */
+        align-self: center; /* Выравнивание по центру */
+    }
+
+    .close-btn:hover {
+        background-color: #de6262;
+    }
 
         .close-btn:hover {
             background-color: #de6262;
