@@ -166,26 +166,73 @@
                 <div>
                     <input type="radio" id="onlineStore" name="siteType" value="onlineStore">
                     <label for="onlineStore">Интернет-магазин</label>
+                 </div>
+                <div>
+                    <input type="radio" id="portfolioBlog" name="siteType" value="portfolioBlog">
+                    <label for="portfolioBlog">Портфолио или блог</label>
                 </div>
             </div>
         </div>
 
         <div id="chatbotSection" class="hidden">
+            <label>Тип чат-бота:</label>
+            <div>
+                <input type="checkbox" id="infoBot" value="info">
+                <label for="infoBot">📄 Информационный</label>
+            </div>
+            <div>
+                <input type="checkbox" id="tradeBot" value="trade">
+                <label for="tradeBot">🛒 Торговый</label>
+            </div>
+            <div>
+                <input type="checkbox" id="serviceBot" value="service">
+                <label for="serviceBot">🔧 Сервисный</label>
+            </div>
+
             <label>Социальные сети:</label>
             <div>
                 <input type="checkbox" id="telegram" value="telegram">
                 <img class="social-logo" src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram"> Telegram
             </div>
+
             <div>
                 <input type="checkbox" id="whatsapp" value="whatsapp">
                 <img class="social-logo" src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp"> WhatsApp
+            </div>
+            <div>
+                <input type="checkbox" id="instagram" value="instagram">
+                <img class="social-logo" src="https://upload.wikimedia.org/wikipedia/commons/9/95/Instagram_logo_2022.svg" alt="Instagram"> Instagram
+            </div>
+      <div>
+    <input type="checkbox" id="vk" value="vk">
+    <img class="social-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/VK_Compact_Logo_%282021-present%29.svg/1024px-VK_Compact_Logo_%282021-present%29.svg.png" alt="VK"> VK
+</div>
+            <div>
+                <input type="checkbox" id="facebook" value="facebook">
+                <img class="social-logo" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook"> Facebook
+            </div>
+
+            <label for="advancedFeatures">Расширенные функции:</label>
+            <div>
+                <input type="checkbox" id="crmIntegration" value="crm">
+                <label for="crmIntegration">🔗 Интеграция с CRM</label>
+            </div>
+            <div>
+                <input type="checkbox" id="paymentProcessing" value="payment">
+                <label for="paymentProcessing">💳 Обработка платежей</label>
+            </div>
+            <div>
+                <input type="checkbox" id="aiProcessing" value="ai">
+                <label for="aiProcessing">🧠 Использование AI</label>
             </div>
         </div>
 
         <label for="currency">Валюта:</label>
         <select id="currency">
-            <option value="rub">🇷🇺 Рубль</option>
+            <option value="rub">🇷🇺 Российский рубль</option>
             <option value="usd">🇺🇸 Доллар</option>
+            <option value="eur">🇪🇺 Евро</option>
+            <option value="byn">🇧🇾 Белорусский рубль</option>
         </select>
 
         <button type="button" id="calculateBtn">🔢 Рассчитать стоимость</button>
@@ -199,43 +246,94 @@
         const tg = window.Telegram.WebApp;
         tg.ready();
 
-        const formTitle = document.getElementById("formTitle");
+        document.body.style.backgroundColor = tg.themeParams.bg_color || "#f4f4f9";
+        document.body.style.color = tg.themeParams.text_color || "#333";
+
         const projectType = document.getElementById("projectType");
         const complexitySection = document.getElementById("complexitySection");
         const chatbotSection = document.getElementById("chatbotSection");
-        const result = document.getElementById("result");
+        const calculateBtn = document.getElementById("calculateBtn");
+        const resultDiv = document.getElementById("result");
 
         projectType.addEventListener("change", () => {
-            const projectValue = projectType.value;
-
-            // Изменяем заголовок
-            if (projectValue === "site") {
-                formTitle.textContent = "Калькулятор стоимости сайта";
-                complexitySection.classList.remove("hidden");
-                chatbotSection.classList.add("hidden");
-            } else if (projectValue === "chatbot") {
-                formTitle.textContent = "Калькулятор стоимости чат-бота";
+            if (projectType.value === "chatbot") {
                 complexitySection.classList.add("hidden");
                 chatbotSection.classList.remove("hidden");
-            } else {
-                formTitle.textContent = "Калькулятор стоимости веб-приложения";
-                complexitySection.classList.add("hidden");
+            } else if (projectType.value === "site") {
                 chatbotSection.classList.add("hidden");
+                complexitySection.classList.remove("hidden");
+            } else {
+                chatbotSection.classList.add("hidden");
+                complexitySection.classList.add("hidden");
             }
         });
 
-        document.getElementById("calculateBtn").addEventListener("click", () => {
-            const projectValue = projectType.value;
-            const currency = document.getElementById("currency").value;
-            let cost = 0;
+      calculateBtn.addEventListener("click", async () => {
+    let cost = 0;
+    const currency = document.getElementById("currency").value;
+    let currencySymbol = "BYN";
+    let rate = 1; // Ставка по умолчанию для BYN
 
-            if (projectValue === "site") cost = 500;
-            if (projectValue === "chatbot") cost = 350;
-            if (projectValue === "webapp") cost = 1200;
+    // Получаем курс через API
+    const response = await fetch(`https://api.exchangerate-api.com/v4/latest/BYN`); // API для актуальных курсов
+    const data = await response.json();
 
-            const currencySymbol = currency === "usd" ? "$" : "₽";
-            result.textContent = `Стоимость: ${cost} ${currencySymbol}`;
-        });
+    // Устанавливаем символ валюты и курс обмена
+    if (currency === "rub") {
+        currencySymbol = "₽";
+        rate = data.rates.RUB; // Курс к рублю
+    } else if (currency === "usd") {
+        currencySymbol = "$";
+        rate = data.rates.USD; // Курс к доллару
+    } else if (currency === "eur") {
+        currencySymbol = "€";
+        rate = data.rates.EUR; // Курс к евро
+    } else if (currency === "byn") {
+        currencySymbol = "BYN";
+        rate = 1; // Ставка для BYN
+    } else if (currency === "usdt") {
+        currencySymbol = "USDT";
+        rate = data.rates.USD; // Преобразуем курс к USDT, так как USDT привязан к доллару
+    }
+
+    // Стоимость 1 бота (в BYN)
+    const botCost = 349;
+
+    // Получаем количество выбранных ботов
+    const selectedSocialNetworks = document.querySelectorAll("#chatbotSection input[type='checkbox']:checked");
+    const numberOfBots = selectedSocialNetworks.length;
+
+    // Корректируем стоимость в зависимости от количества ботов
+    if (projectType.value === "chatbot") {
+        let totalCost = 0;
+
+        // Добавляем стоимость первого бота
+        totalCost += botCost;
+
+        // Добавляем стоимость для остальных ботов с применением скидки
+        if (numberOfBots > 1) totalCost += botCost * 0.75;  // 2-й бот: 25% скидка
+        if (numberOfBots > 2) totalCost += botCost * 0.50;  // 3-й бот: 50% скидка
+        if (numberOfBots > 3) totalCost += botCost * 0.25;  // 4-й бот: 75% скидка
+        if (numberOfBots > 4) totalCost += 0;               // 5-й бот: бесплатно
+
+        // Присваиваем итоговую стоимость
+        cost = totalCost;
+    }
+
+    // Если выбран другой тип проекта
+    if (projectType.value === "site") {
+        cost = 529; // Стоимость сайта в BYN
+    } else if (projectType.value === "webapp") {
+        cost = 1199; // Стоимость веб-приложения в BYN
+    }
+
+    // Преобразуем стоимость в нужную валюту
+    cost *= rate;
+
+    // Выводим цену
+    resultDiv.textContent = `Стоимость: ${cost.toFixed(2)} ${currencySymbol}`;
+});
+
     </script>
 </body>
 </html>
