@@ -177,6 +177,7 @@
         <div id="chatbotSection" class="hidden">
     <label>Тип чат-бота:</label>
     <div>
+
         <input type="radio" id="infoBot" name="chatbotType" value="info">
         <label for="infoBot">📄 Информационный</label>
     </div>
@@ -189,33 +190,21 @@
         <label for="serviceBot">🔧 Сервисный</label>
     </div>
 
+<br>
 
+         <label>Выберите количество социальных сетей:</label>
+<select id="social-count">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+</select>
 
-            <label>Социальные сети:</label>
-            <div>
-                <input type="checkbox" id="telegram" value="telegram">
-                <img class="social-logo" src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram"> Telegram
-            </div>
-
-            <div>
-                <input type="checkbox" id="whatsapp" value="whatsapp">
-                <img class="social-logo" src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp"> WhatsApp
-            </div>
-            <div>
-                <input type="checkbox" id="instagram" value="instagram">
-                <img class="social-logo" src="https://upload.wikimedia.org/wikipedia/commons/9/95/Instagram_logo_2022.svg" alt="Instagram"> Instagram
-            </div>
-      <div>
-    <input type="checkbox" id="vk" value="vk">
-    <img class="social-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/VK_Compact_Logo_%282021-present%29.svg/1024px-VK_Compact_Logo_%282021-present%29.svg.png" alt="VK"> VK
-</div>
-            <div>
-                <input type="checkbox" id="facebook" value="facebook">
-                <img class="social-logo" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook"> Facebook
-            </div>
-
+    <br>
             <label for="advancedFeatures">Расширенные функции:</label>
             <div>
+
                 <input type="checkbox" id="crmIntegration" value="crm">
                 <label for="crmIntegration">🔗 Интеграция с CRM</label>
             </div>
@@ -313,20 +302,60 @@
         // Добавляем стоимость первого бота
         totalCost += botCost;
 
-        // Добавляем стоимость для остальных ботов с применением скидки
-        if (numberOfBots > 1) totalCost += botCost * 0.75;  // 2-й бот: 25% скидка
-        if (numberOfBots > 2) totalCost += botCost * 0.50;  // 3-й бот: 50% скидка
-        if (numberOfBots > 3) totalCost += botCost * 0.25;  // 4-й бот: 75% скидка
-        if (numberOfBots > 4) totalCost += 0;               // 5-й бот: бесплатно
+
+
+        const socialCountSelect = document.querySelector("#social-count");
+const selectedSocialCount = parseInt(socialCountSelect.value);
+
+// Добавляем 10% за каждую выбранную социальную сеть
+if (selectedSocialCount === 1) totalCost *= 1.00;  // 1 сеть
+if (selectedSocialCount === 2) totalCost *= 1.90;  // 2 сети
+if (selectedSocialCount === 3) totalCost *= 2.70;  // 3 сети
+if (selectedSocialCount === 4) totalCost *= 3.40;  // 4 сети
+if (selectedSocialCount === 5) totalCost *= 4.00;  // 5 сетей
+
+
+
 
         const crmSelected = document.querySelector("#crmIntegration").checked;
-const paymentSelected = document.querySelector("#paymentProcessing").checked;
-const aiSelected = document.querySelector("#aiProcessing").checked;
+        const paymentSelected = document.querySelector("#paymentProcessing").checked;
+        const aiSelected = document.querySelector("#aiProcessing").checked;
 
-// Добавляем 10% за каждую выбранную расширенную функцию
-if (crmSelected) totalCost *= 1.10;  // 10% за CRM
-if (paymentSelected) totalCost *= 1.10;  // 10% за Payment
-if (aiSelected) totalCost *= 1.10;  // 10% за AI
+
+
+       if (selectedSocialCount === 1) {
+    // Добавляем 10% за каждую выбранную расширенную функцию
+    if (crmSelected) totalCost *= 1.10;  // 10% за CRM
+    if (paymentSelected) totalCost *= 1.10;  // 10% за Payment
+    if (aiSelected) totalCost *= 1.10;  // 10% за AI
+} else if (selectedSocialCount === 2) {
+    // Добавляем 20% за каждую выбранную расширенную функцию
+    if (crmSelected) totalCost *= 1.10;  // 20% за CRM
+    if (paymentSelected) totalCost *= 1.10;  // 20% за Payment
+    if (aiSelected) totalCost *= 1.10;  // 20% за AI
+} else if (selectedSocialCount === 3) {
+    // Добавляем 30% за каждую выбранную расширенную функцию
+    if (crmSelected) totalCost *= 1.10;  // 30% за CRM
+    if (paymentSelected) totalCost *= 1.10;  // 30% за Payment
+    if (aiSelected) totalCost *= 1.10;  // 30% за AI
+}else if (selectedSocialCount === 4) {
+    // Добавляем 30% за каждую выбранную расширенную функцию
+    if (crmSelected) totalCost *= 1.10;  // 30% за CRM
+    if (paymentSelected) totalCost *= 1.10;  // 30% за Payment
+    if (aiSelected) totalCost *= 1.10;  // 30% за AI
+}else if (selectedSocialCount === 5) {
+    // Добавляем 30% за каждую выбранную расширенную функцию
+    if (crmSelected) totalCost *= 1.30;  // 30% за CRM
+    if (paymentSelected) totalCost *= 1.30;  // 30% за Payment
+    if (aiSelected) totalCost *= 1.30;  // 30% за AI
+}
+
+
+
+
+
+
+
         // Присваиваем итоговую стоимость
         cost = totalCost;
     }
@@ -340,7 +369,7 @@ if (projectType.value === "site") {
     }
 
     if (siteType.value === "singlePage" || siteType.value === "portfolioBlog") {
-        cost = 349; // Стоимость одностраничного сайта или портфолио/блога в BYN
+        cost = 399; // Стоимость одностраничного сайта или портфолио/блога в BYN
     } else if (siteType.value === "multiPage") {
         cost = 529; // Стоимость многостраничного сайта в BYN
     } else if (siteType.value === "onlineStore") {
